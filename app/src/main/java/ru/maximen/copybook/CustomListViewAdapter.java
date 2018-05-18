@@ -1,5 +1,6 @@
 package ru.maximen.copybook;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,28 +8,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.List;
+
+import ru.maximen.copybook.data.Data;
 
 public class CustomListViewAdapter extends BaseAdapter {
 
     private Context context;
-    private String[] title;
-    private String[] subtitle;
+    private List<? extends Data> dataList;
 
-    public CustomListViewAdapter(Context context, String[] titles, String[] subtitles) {
+    public CustomListViewAdapter(Context context, List<? extends Data> dataList) {
         this.context = context;
-        this.title = titles;
-        this.subtitle = subtitles;
+        this.dataList = dataList;
     }
 
     @Override
     public int getCount() {
-        return title.length;
+        return dataList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return title[position];
+        return dataList.get(position);
     }
 
     @Override
@@ -39,15 +40,16 @@ public class CustomListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View rowMain = layoutInflater.inflate(R.layout.row_main, parent, false);
+        @SuppressLint("ViewHolder") View rowMain = layoutInflater.inflate(R.layout.row_main, parent,
+                false);
 
         TextView nameTextView = rowMain.findViewById(R.id.name_textView);
-        nameTextView.setText(title[position]);
+        nameTextView.setText(dataList.get(position).title());
 
         TextView positionTextView = rowMain.findViewById(R.id.position_textview);
-        positionTextView.setText(subtitle[position]);
-
+        positionTextView.setText(dataList.get(position).subTitle());
 
         return rowMain;
     }
+
 }

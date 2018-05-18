@@ -19,14 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/activity_title_settings"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".NewlistActivity"
-            android:label="@string/activity_title_newlist"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

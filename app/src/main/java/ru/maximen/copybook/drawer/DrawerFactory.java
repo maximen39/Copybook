@@ -1,10 +1,7 @@
-package ru.maximen.copybook;
+package ru.maximen.copybook.drawer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -15,36 +12,35 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class FactoryDrawer {
+import ru.maximen.copybook.MainActivity;
+import ru.maximen.copybook.R;
 
+public class DrawerFactory {
+
+    private MainActivity mainActivity;
     private Drawer drawer;
-    private Toolbar toolbar;
-    private Activity activity;
 
-    public FactoryDrawer(Toolbar toolbar, Activity activity) {
-        this.toolbar = toolbar;
-        this.activity = activity;
+    public DrawerFactory(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
     public Drawer initDrawer() {
         this.drawer = new DrawerBuilder()
-                .withActivity(activity)
-                .withToolbar(toolbar)
+                .withActivity(mainActivity)
+                .withToolbar(mainActivity.getToolbar())
                 .withActionBarDrawerToggle(true)
                 .addDrawerItems(getItems())
-                .build();
+                .buildForFragment();
         return this.drawer;
     }
 
-    @NonNull
     private IDrawerItem[] getItems() {
         return new IDrawerItem[]{
                 getHomeButton(),
                 new SectionDrawerItem().withName(R.string.drawer_item_settings),
                 getConfigButton(),
                 getHelpButton(),
-                new DividerDrawerItem(),
-                getAllRecords()
+                new DividerDrawerItem()
         };
     }
 
@@ -55,13 +51,13 @@ public class FactoryDrawer {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (!(activity instanceof SettingsActivity)) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    SettingsActivity.class);
-                            activity.startActivity(intent);
-                            return true;
+                        if (!mainActivity.getSettingsFragment().isVisible()) {
+                            mainActivity.replaceFragment(mainActivity.getSettingsFragment());
+                            if (drawer.isDrawerOpen()) {
+                                drawer.closeDrawer();
+                            }
                         }
-                        return false;
+                        return true;
                     }
                 });
     }
@@ -73,13 +69,13 @@ public class FactoryDrawer {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (!(activity instanceof MainActivity)) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    MainActivity.class);
-                            activity.startActivity(intent);
-                            return true;
+                        if (!mainActivity.getMainFragment().isVisible()) {
+                            mainActivity.replaceFragment(mainActivity.getMainFragment());
+                            if (drawer.isDrawerOpen()) {
+                                drawer.closeDrawer();
+                            }
                         }
-                        return false;
+                        return true;
                     }
                 });
     }
@@ -93,16 +89,9 @@ public class FactoryDrawer {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                                 Uri.parse("http://copybook.ru/help"));
-                        activity.startActivity(browserIntent);
+                        mainActivity.startActivity(browserIntent);
                         return false;
                     }
                 });
-    }
-
-    private SecondaryDrawerItem getAllRecords() {
-        return new SecondaryDrawerItem()
-                .withName(R.string.drawer_item_all)
-                .withIcon(FontAwesome.Icon.faw_list)
-                .withBadge("73");
     }
 }
