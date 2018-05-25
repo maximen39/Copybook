@@ -1,15 +1,15 @@
 package ru.maximen.copybook.data;
 
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
-public interface SectionData<S> extends Data {
+public interface SectionData extends Data {
 
-    int getCount();
+    List<Data> getItems();
 
-    Data addItem(S item);
+    SectionData addItem(Data item);
 
-    Collection<S> getItems();
+    SectionData addAllItems(List<Data> items);
 
-    Data setSortStrategy(Comparator<S> comparator);
+    SectionData setSortStrategy(Comparator<Data> comparator);
 }

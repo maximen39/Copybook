@@ -51,12 +51,12 @@ public class DrawerFactory {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (!mainActivity.getSettingsFragment().isVisible()) {
+                        /*if (!mainActivity.getSettingsFragment().isVisible()) {
                             mainActivity.replaceFragment(mainActivity.getSettingsFragment());
                             if (drawer.isDrawerOpen()) {
                                 drawer.closeDrawer();
                             }
-                        }
+                        }*/
                         return true;
                     }
                 });
@@ -69,7 +69,7 @@ public class DrawerFactory {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (!mainActivity.getMainFragment().isVisible()) {
+                        if (mainActivity.getCurrentFragment() != mainActivity.getMainFragment()) {
                             mainActivity.replaceFragment(mainActivity.getMainFragment());
                             if (drawer.isDrawerOpen()) {
                                 drawer.closeDrawer();

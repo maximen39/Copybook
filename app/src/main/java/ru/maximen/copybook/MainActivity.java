@@ -8,14 +8,18 @@ import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.materialdrawer.Drawer;
 
+import ru.maximen.copybook.data.Section;
 import ru.maximen.copybook.drawer.DrawerFactory;
-import ru.maximen.copybook.fragments.MainFragment;
-import ru.maximen.copybook.fragments.SettingsFragment;
+import ru.maximen.copybook.fragments.BaseCopybookFragment;
+import ru.maximen.copybook.fragments.ListFragment;
+import ru.maximen.copybook.service.CopybookService;
+import ru.maximen.copybook.service.DatabaseCopybookService;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment mainFragment;
-    private Fragment settingsFragment;
+    private BaseCopybookFragment currentFragment;
+    private BaseCopybookFragment mainFragment;
+    private CopybookService localService;
 
     private Toolbar toolbar;
     private Drawer drawer;
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.localService = new DatabaseCopybookService(this);
         initFragments();
         initViews();
 
@@ -36,20 +41,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragments() {
-        this.settingsFragment = new SettingsFragment();
-        this.mainFragment = new MainFragment().setMainActivity(this);
-        startMainFragment(mainFragment);
-    }
+        Section section = new Section();
+        section.id(-1).title("CopyBook");
+        section.addAllItems(Utils.getMainSectionList(getLocalService()));
 
-    private void startMainFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(
-                        R.animator.slide_in_left, R.animator.slide_in_right
-                )
-                .add(R.id.fragmentContent, fragment)
-                .addToBackStack(null)
-                .commit();
+        ListFragment fragment = new ListFragment();
+        fragment.section(section).mainActivity(this);
+
+        setCurrentFragment(fragment);
+        this.mainFragment = fragment;
+        replaceFragment(fragment);
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         R.animator.slide_in_left, R.animator.slide_in_right,
                         R.animator.slide_in_left_reverse, R.animator.slide_in_right_reverse
                 ).replace(R.id.fragmentContent, fragment)
-                .addToBackStack(null)
+                .addToBackStack(fragment.toString())
                 .commit();
     }
 
@@ -71,22 +72,31 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
-        } else if (getMainFragment().isVisible()) {
+            return;
+        } else if (getCurrentFragment() == getMainFragment()) {
             finish();
-        } else {
-            super.onBackPressed();
+            return;
         }
-    }
-
-    public Fragment getMainFragment() {
-        return mainFragment;
-    }
-
-    public Fragment getSettingsFragment() {
-        return settingsFragment;
+        super.onBackPressed();
     }
 
     public Toolbar getToolbar() {
         return toolbar;
+    }
+
+    public BaseCopybookFragment getCurrentFragment() {
+        return currentFragment;
+    }
+
+    public void setCurrentFragment(BaseCopybookFragment currentFragment) {
+        this.currentFragment = currentFragment;
+    }
+
+    public BaseCopybookFragment getMainFragment() {
+        return mainFragment;
+    }
+
+    public CopybookService getLocalService() {
+        return localService;
     }
 }

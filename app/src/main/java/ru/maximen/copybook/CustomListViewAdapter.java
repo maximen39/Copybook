@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,16 +41,32 @@ public class CustomListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+        final Data data = dataList.get(position);
         @SuppressLint("ViewHolder") View rowMain = layoutInflater.inflate(R.layout.row_main, parent,
                 false);
 
         TextView nameTextView = rowMain.findViewById(R.id.name_textView);
-        nameTextView.setText(dataList.get(position).title());
+        nameTextView.setText(data.title());
 
-        TextView positionTextView = rowMain.findViewById(R.id.position_textview);
-        positionTextView.setText(dataList.get(position).subTitle());
+        TextView positionTextView = rowMain.findViewById(R.id.subName_textView);
+        positionTextView.setText(data.subTitle());
+
+        final ImageView imageView = rowMain.findViewById(R.id.star_imageView);
+        /*updateImage(imageView, data);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.isStar(!data.isStar());
+                updateImage(imageView, data);
+            }
+        });*/
 
         return rowMain;
     }
-
+/*
+    private void updateImage(ImageView image, Data data) {
+        image.setBackgroundResource(data.isStar() ? R.drawable.baseline_star_black_18dp :
+                R.drawable.baseline_star_border_black_18dp);
+    }*/
 }
