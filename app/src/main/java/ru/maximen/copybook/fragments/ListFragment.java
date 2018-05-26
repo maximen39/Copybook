@@ -1,5 +1,6 @@
 package ru.maximen.copybook.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -12,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import ru.maximen.copybook.CreatorActivity;
 import ru.maximen.copybook.CustomListViewAdapter;
 import ru.maximen.copybook.R;
 import ru.maximen.copybook.data.Data;
 import ru.maximen.copybook.data.Section;
 import ru.maximen.copybook.data.SectionData;
+import ru.maximen.copybook.data.contents.SimpleData;
 
 public class ListFragment extends BaseCopybookFragment {
 
@@ -52,7 +55,7 @@ public class ListFragment extends BaseCopybookFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, null);
         initViews(view);
 
@@ -70,11 +73,56 @@ public class ListFragment extends BaseCopybookFragment {
 
                         mainActivity().setCurrentFragment(copybookFragment);
                         mainActivity().replaceFragment(copybookFragment);
+                    } else if (data instanceof SimpleData) {
+                        Intent intent = new Intent(mainActivity(), CreatorActivity.class);
+                        intent.putExtra("position", position);
+                        intent.putExtra("id", (int)data.id());
+                        intent.putExtra("name", data.title());
+                        intent.putExtra("are", ((SimpleData) data).getContent());
+                        mainActivity().startActivityForResult(intent, 1);
                     }
                 }
             });
         }
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainActivity(), CreatorActivity.class);
+                intent.putExtra("position", -1);
+                intent.putExtra("id", -1);
+                intent.putExtra("name", "");
+                intent.putExtra("are", "");
+                mainActivity().startActivityForResult(intent, 1);
+            }
+        });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        int position = data.getIntExtra("position", -1);
+        long id = data.getIntExtra("id",  -1);
+        String name = data.getStringExtra("name");
+        String are = data.getStringExtra("are");
+        if (position == -1 || id == -1) {
+            SimpleData simpleData = new SimpleData();
+            simpleData.title(name).subTitle("");
+            simpleData.setContent(are);
+            mainActivity().getLocalService().addData(section().id(), simpleData);
+            section().addItem(simpleData);
+            customListViewAdapter.notifyDataSetChanged();
+        } else {
+            SimpleData simpleData = new SimpleData();
+            simpleData.title(name).subTitle("").id(id);
+            simpleData.setContent(are);
+            mainActivity().getLocalService().updateData(section().id(), simpleData);
+            section().setItem(position, simpleData);
+            customListViewAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initViews(View view) {

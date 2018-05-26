@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
             return;
-        } else if (getCurrentFragment() == getMainFragment()) {
+        } else if (getCurrentFragment().section().id() == -1) {
             finish();
             return;
         }
