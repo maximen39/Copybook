@@ -123,6 +123,9 @@ public class ListFragment extends BaseCopybookFragment {
             section().setItem(position, simpleData);
             customListViewAdapter.notifyDataSetChanged();
         }
+        System.out.println("added");
+        System.out.println(name);
+        System.out.println(id);
     }
 
     private void initViews(View view) {

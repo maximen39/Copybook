@@ -2,6 +2,7 @@ package ru.maximen.copybook;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -90,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setCurrentFragment(BaseCopybookFragment currentFragment) {
         this.currentFragment = currentFragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        super.onActivityResult(requestCode,resultCode,data);
+
     }
 
     public BaseCopybookFragment getMainFragment() {

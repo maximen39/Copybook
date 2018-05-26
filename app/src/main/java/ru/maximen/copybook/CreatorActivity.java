@@ -31,6 +31,8 @@ public class CreatorActivity extends AppCompatActivity {
                     String namee = getIntent().getStringExtra("name");
                     String aree = getIntent().getStringExtra("are");
 
+                    System.out.println(are.getText().toString());
+                    System.out.println(name.getText().toString());
 
                     if (!are.getText().toString().equalsIgnoreCase(aree) || !name.getText().toString().equalsIgnoreCase(namee)) {
                         Intent intent = new Intent();
