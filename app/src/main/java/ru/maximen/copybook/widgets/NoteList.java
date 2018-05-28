@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import ru.maximen.copybook.R;
 import ru.maximen.copybook.dto.Note;
+import ru.maximen.copybook.dto.Tag;
 import ru.maximen.copybook.utils.NoteUtil;
 
 public class NoteList extends BaseAdapter {
@@ -34,12 +35,14 @@ public class NoteList extends BaseAdapter {
     private ArchiveList archiveList;
     private TrashList trashList;
     private ReminderList reminderList;
+    private TagList tagList;
 
     public NoteList(Context context) {
         this.noteList = new ArrayList<>();
         this.archiveList = new ArchiveList(context);
         this.trashList = new TrashList(context);
-        this.reminderList = new ReminderList(context, this);
+        this.tagList = new TagList(context);
+        this.reminderList = new ReminderList(context);
         this.context = context;
         this.layoutInflater = (LayoutInflater.from(context));
     }
@@ -51,11 +54,11 @@ public class NoteList extends BaseAdapter {
             trashList.add(note);
         } else {
             noteList.add(note);
-            //notifyDataSetChanged();
             if (note.getReminder() != null) {
                 reminderList.add(note);
             }
         }
+        tagList.addAll(note.getTags());
         return this;
     }
 
@@ -67,11 +70,11 @@ public class NoteList extends BaseAdapter {
                 trashList.add(note);
             } else {
                 noteList.add(note);
-                //notifyDataSetChanged();
                 if (note.getReminder() != null) {
                     reminderList.add(note);
                 }
             }
+            tagList.addAll(note.getTags());
         }
         return this;
     }
@@ -81,6 +84,7 @@ public class NoteList extends BaseAdapter {
         List<Note> trash = new ArrayList<>();
         List<Note> archive = new ArrayList<>();
         List<Note> reminder = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
 
         for (Note n : note) {
             if (n.isArchive()) {
@@ -93,26 +97,20 @@ public class NoteList extends BaseAdapter {
                     reminder.add(n);
                 }
             }
+            tags.addAll(n.getTags());
         }
+        tagList.setTagList(tags);
         trashList.setTrashList(trash);
         archiveList.setArchiveList(archive);
         reminderList.setReminderList(reminder);
         noteList = notes;
-        //notifyDataSetChanged();
         return this;
     }
 
     public NoteList remove(int index) {//TODO
         noteList.remove(index);
-        //notifyDataSetChanged();
         return this;
     }
-
-  /*  public NoteList remove(Note note) {
-        noteList.remove(note);
-        notifyDataSetChanged();
-        return this;
-    }*/
 
     public List<Note> getNoteList() {
         return noteList;
@@ -190,10 +188,15 @@ public class NoteList extends BaseAdapter {
         return reminderList;
     }
 
+    public TagList getTagList() {
+        return tagList;
+    }
+
     public void notifyAllDataSetChanged() {
         notifyDataSetChanged();
         getReminderList().notifyDataSetChanged();
         getTrashList().notifyDataSetChanged();
         getArchiveList().notifyDataSetChanged();
+        getTagList().notifyDataSetChanged();
     }
 }

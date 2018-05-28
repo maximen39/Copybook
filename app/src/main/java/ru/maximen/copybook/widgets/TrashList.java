@@ -106,7 +106,7 @@ public class TrashList extends BaseAdapter {
             }
             subTitleView.setTextColor(context.getResources().getColor(R.color.colorRed));
         } else {
-            if (note.getContent().length() <= 30) {
+            if (note.getContent().length() >= 30) {
                 String text = note.getContent().substring(0, 29);
                 subTitleView.setText(text.trim().replace("\n", " "));
             } else {

@@ -31,44 +31,32 @@ public class ReminderList extends BaseAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private List<Note> reminderList;
-    private NoteList noteList;
 
-    public ReminderList(Context context, NoteList noteList) {
+    public ReminderList(Context context) {
         this.reminderList = new ArrayList<>();
-        this.noteList = noteList;
         this.context = context;
         this.layoutInflater = (LayoutInflater.from(context));
     }
 
     ReminderList add(Note note) {
         reminderList.add(note);
-        //notifyDataSetChanged();
         return this;
     }
 
     ReminderList addAll(List<Note> notes) {
         reminderList.addAll(notes);
-        //notifyDataSetChanged();
         return this;
     }
 
     ReminderList setReminderList(List<Note> note) {
         reminderList = note;
-        //notifyDataSetChanged();
         return this;
     }
 
     public ReminderList remove(int index) {//TODO
         reminderList.remove(index);
-        //notifyDataSetChanged();
         return this;
     }
-
-/*    public TrashList remove(Note note) {
-        trashList.remove(note);
-        notifyDataSetChanged();
-        return this;
-    }*/
 
     public List<Note> getReminderList() {
         return reminderList;
@@ -108,7 +96,7 @@ public class ReminderList extends BaseAdapter {
             }
             subTitleView.setTextColor(context.getResources().getColor(R.color.colorRed));
         } else {
-            if (note.getContent().length() <= 30) {
+            if (note.getContent().length() >= 30) {
                 String text = note.getContent().substring(0, 29);
                 subTitleView.setText(text.trim().replace("\n", " "));
             } else {

@@ -14,14 +14,15 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.maximen.copybook.ListActivity;
 import ru.maximen.copybook.StaticVariables;
 import ru.maximen.copybook.dto.Note;
 import ru.maximen.copybook.fragments.AbstractUpdatebleFragment;
 
 public class NoteManager {
 
-    private final NoteList noteList;
-    private final Activity activity;
+    private NoteList noteList;
+    private Activity activity;
     private String token;
     private List<AbstractUpdatebleFragment> abstractUpdatebleFragments;
 
@@ -37,7 +38,7 @@ public class NoteManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (StaticVariables.authorized) {
+                while (StaticVariables.authorized && ((ListActivity) activity).isStart()) {
                     try {
                         String url = StaticVariables.ACCOUNT_URL + "notes";
                         HttpAuthentication authentication = new HttpBasicAuthentication(
@@ -71,6 +72,11 @@ public class NoteManager {
                         e.printStackTrace();
                     }
                 }
+                noteList = null;
+                activity = null;
+                token = null;
+                abstractUpdatebleFragments.clear();
+                abstractUpdatebleFragments = null;
             }
         }).start();
     }

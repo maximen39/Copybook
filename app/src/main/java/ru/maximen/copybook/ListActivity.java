@@ -55,6 +55,7 @@ public class ListActivity extends AbstractAsyncActivity {
     private NoteManager noteManager;
 
     private NoteList noteList;
+    private boolean start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,22 @@ public class ListActivity extends AbstractAsyncActivity {
             DrawerFactory drawerFactory = new DrawerFactory(this, toolbar);
             drawer = drawerFactory.initDrawer();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.start = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.start = false;
+    }
+
+    public boolean isStart() {
+        return start;
     }
 
     private void initFragments() {
@@ -148,6 +165,9 @@ public class ListActivity extends AbstractAsyncActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             dismissProgressDialog();
+            if(result){
+                StaticVariables.authorized = false;
+            }
         }
     }
 
