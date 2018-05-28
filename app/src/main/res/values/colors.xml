@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="toolbar">#303F9F</color>
+    <color name="colorPrimaryDark">#2e4058</color>
+    <color name="colorStatusBar">#6c6dec</color>
+    <color name="colorAccent">#009a9a</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorRed">#be4b4b</color>
+    <color name="toolbar">#2e4058</color>
+    <color name="colorOrange">#143F8F</color>
+    <color name="colorSerega">#666666</color>
+
+    <color name="colorW">#fafafa</color>
+    <color name="colorR">#ff8a80</color>
+    <color name="colorO">#ffd180</color>
+    <color name="colorY">#ffff8d</color>
+    <color name="colorG">#ccff90</color>
+    <color name="colorP">#b388ff</color>
+    <color name="colorB">#80d8ff</color>
+    <color name="colorBG">#a7ffeb</color>
+    <color name="colorDB">#82b1ff</color>
+    <color name="colorPB">#803ff4</color>
 </resources>

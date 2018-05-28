@@ -29,6 +29,9 @@ dependencies {
         transitive = true
     }
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.0'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
     implementation 'com.mikepenz:fontawesome-typeface:5.0.6.0@aar'
     implementation 'com.android.support:appcompat-v7:27.1.1'

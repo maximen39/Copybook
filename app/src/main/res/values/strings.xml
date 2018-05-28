@@ -4,9 +4,12 @@
 
     <string name="activity_creator">Create new note</string>
 
-    <string name="drawer_item_settings">Settings</string>
-    <string name="drawer_item_home">Home</string>
-    <string name="drawer_item_config">Configure</string>
-    <string name="drawer_item_help">Help</string>
-    <string name="drawer_item_all">All records</string>
+    <string name="drawer_item_notes">Заметки</string>
+    <string name="drawer_item_reminders">Напоминания</string>
+    <string name="drawer_item_tags">Тэги</string>
+    <string name="drawer_item_archive">Архив</string>
+    <string name="drawer_item_trash">Корзина</string>
+    <string name="drawer_item_settings">Настройки</string>
+    <string name="drawer_item_about">О Приложении</string>
+    <string name="drawer_item_logout">Выйти</string>
 </resources>
