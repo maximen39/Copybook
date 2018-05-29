@@ -58,7 +58,9 @@ public class NoteList extends BaseAdapter {
                 reminderList.add(note);
             }
         }
-        tagList.addAll(note.getTags());
+        if(note.getTags() != null) {
+            tagList.addAll(note.getTags());
+        }
         return this;
     }
 

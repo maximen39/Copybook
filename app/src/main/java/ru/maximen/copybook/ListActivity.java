@@ -3,6 +3,7 @@ package ru.maximen.copybook;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +28,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import ru.maximen.copybook.drawer.DrawerFactory;
-import ru.maximen.copybook.dto.ResponseDto;
 import ru.maximen.copybook.fragments.AbstractUpdatebleFragment;
 import ru.maximen.copybook.fragments.FragmentAbout;
 import ru.maximen.copybook.fragments.FragmentArchive;
@@ -152,10 +152,10 @@ public class ListActivity extends AbstractAsyncActivity {
             HttpEntity httpEntity = new HttpEntity<>(body, requestHeaders);
 
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
             try {
-                restTemplate.exchange(url, HttpMethod.GET, httpEntity, ResponseDto.class);
+                restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
                 return true;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -166,10 +166,15 @@ public class ListActivity extends AbstractAsyncActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             dismissProgressDialog();
-            if(result){
+            if (result) {
                 StaticVariables.authorized = false;
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public Fragment getFragmentAbout() {
@@ -214,5 +219,9 @@ public class ListActivity extends AbstractAsyncActivity {
 
     public NoteList getNoteList() {
         return noteList;
+    }
+
+    public NoteManager getNoteManager() {
+        return noteManager;
     }
 }

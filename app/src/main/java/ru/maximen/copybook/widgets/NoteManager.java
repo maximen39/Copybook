@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,10 +39,12 @@ public class NoteManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (StaticVariables.authorized && ((ListActivity) activity).isStart()) {
+                while (StaticVariables.authorized) {
                     try {
-                        update();
-                        Thread.sleep(10 * 1000);
+                        if (((ListActivity) activity).isStart()) {
+                            update();
+                        }
+                        Thread.sleep(3 * 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -85,6 +88,54 @@ public class NoteManager {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public synchronized void addNote(final Note note) {
+        if (token == null) {
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String url = StaticVariables.ACCOUNT_URL + "add/note";
+                    HttpAuthentication authentication = new HttpBasicAuthentication(
+                            StaticVariables.CLIENT_ID, StaticVariables.SECRET);
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    requestHeaders.add("archive", String.valueOf(note.isArchive()));
+                    requestHeaders.add("fix", String.valueOf(note.isFix()));
+                    requestHeaders.add("trash", String.valueOf(note.isTrash()));
+                    requestHeaders.add("content", note.getContent());
+                    requestHeaders.add("title", note.getTitle());
+                    Charset utf8 = Charset.forName("UTF-8");
+                    if(note.getReminder() != null) {
+                        requestHeaders.add("reminder", String.valueOf(note.getReminder().getRemindDate()));
+                    }
+
+                    requestHeaders.setAuthorization(authentication);
+                    requestHeaders.add("Authorization", "Bearer " + token);
+
+                    HttpEntity<?> httpEntity = new HttpEntity<>(requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                    ResponseEntity<Note> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Note.class);
+                    if (response != null && response.getBody() != null) {
+                        System.out.println(response.getBody());
+                        noteList.add(response.getBody());
+                        AbstractUpdatebleFragment fragment = getVisibleFragment();
+                        if (fragment != null) {
+                            fragment.onUpdateList();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 
     private AbstractUpdatebleFragment getVisibleFragment() {

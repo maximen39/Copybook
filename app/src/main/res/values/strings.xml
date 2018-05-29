@@ -15,4 +15,8 @@
     <string name="title">Название</string>
     <string name="remind_me">Добавить нопоминание</string>
     <string name="edit_remind_me">Редактировать нопоминание</string>
+    <string name="enable_reminder">Включить напоминание</string>
+    <string name="remind_date_and_time">Напоминание установено на %1$s, %2$s %3$s</string>
+    <string name="date_reminder_default">Сегодня</string>
+    <string name="date_error_check_again">Неправильно введена дата.</string>
 </resources>

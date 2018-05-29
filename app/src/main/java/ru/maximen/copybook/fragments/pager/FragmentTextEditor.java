@@ -13,15 +13,23 @@ import ru.maximen.copybook.R;
 public class FragmentTextEditor extends Fragment {
 
     private EditText editText;
+    private String text;
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_texteditor, container, false);
         this.editText = view.findViewById(R.id.edit_text);
+        if (text != null) {
+            this.editText.setText(text);
+        }
         return view;
     }
 
     public EditText getEditText() {
         return editText;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
