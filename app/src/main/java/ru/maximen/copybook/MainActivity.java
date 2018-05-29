@@ -104,7 +104,7 @@ public class MainActivity extends AbstractAsyncActivity {
         @Override
         protected OAuthCheck doInBackground(String... params) {
             String url = StaticVariables.OAUTH_URL + "check_token";
-            HttpAuthentication authentication = new HttpBasicAuthentication("copybookapp", "ASDKLnsdoi324");
+            HttpAuthentication authentication = new HttpBasicAuthentication(StaticVariables.CLIENT_ID, StaticVariables.SECRET);
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.add("token", params[0]);
 

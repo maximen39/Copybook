@@ -87,7 +87,7 @@ public class FragmentSignin extends AbstractAsyncFragment {
         @Override
         protected OAuthToken doInBackground(Void... params) {
             String url = StaticVariables.OAUTH_URL + "token";
-            HttpAuthentication authentication = new HttpBasicAuthentication("copybookapp", "ASDKLnsdoi324");
+            HttpAuthentication authentication = new HttpBasicAuthentication(StaticVariables.CLIENT_ID, StaticVariables.SECRET);
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.add("grant_type", "password");
             body.add("username", username);

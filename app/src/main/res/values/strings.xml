@@ -12,4 +12,7 @@
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_about">О Приложении</string>
     <string name="drawer_item_logout">Выйти</string>
+    <string name="title">Название</string>
+    <string name="remind_me">Добавить нопоминание</string>
+    <string name="edit_remind_me">Редактировать нопоминание</string>
 </resources>

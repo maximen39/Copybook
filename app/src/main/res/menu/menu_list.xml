@@ -4,7 +4,7 @@
     tools:context=".MainActivity">
 
     <item android:id="@+id/action_add"
-        android:title="@string/action_add"
+        android:title="@string/remind_me"
         android:orderInCategory="100"
         app:showAsAction="never" />
 

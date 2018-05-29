@@ -59,6 +59,7 @@ public class ListActivity extends AbstractAsyncActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.start = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         this.noteList = new NoteList(this);
@@ -142,7 +143,7 @@ public class ListActivity extends AbstractAsyncActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             String url = StaticVariables.OAUTH_URL + "revoke_token";
-            HttpAuthentication authentication = new HttpBasicAuthentication("copybookapp", "ASDKLnsdoi324");
+            HttpAuthentication authentication = new HttpBasicAuthentication(StaticVariables.CLIENT_ID, StaticVariables.SECRET);
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.add("token", params[0]);
 

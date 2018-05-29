@@ -40,33 +40,7 @@ public class NoteManager {
             public void run() {
                 while (StaticVariables.authorized && ((ListActivity) activity).isStart()) {
                     try {
-                        String url = StaticVariables.ACCOUNT_URL + "notes";
-                        HttpAuthentication authentication = new HttpBasicAuthentication(
-                                "copybookapp", "ASDKLnsdoi324");
-
-                        HttpHeaders requestHeaders = new HttpHeaders();
-
-                        requestHeaders.setAuthorization(authentication);
-                        requestHeaders.add("Authorization", "Bearer " + token);
-
-                        HttpEntity httpEntity = new HttpEntity<>(requestHeaders);
-
-                        RestTemplate restTemplate = new RestTemplate();
-                        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                        try {
-                            ResponseEntity<Note[]> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Note[].class);
-                            if (response != null && response.getBody() != null) {
-                                List<Note> notes = Arrays.asList(response.getBody());
-                                noteList.setNoteList(notes);
-                                AbstractUpdatebleFragment fragment = getVisibleFragment();
-                                if (fragment != null) {
-                                    fragment.onUpdateList();
-                                }
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
+                        update();
                         Thread.sleep(10 * 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -75,10 +49,42 @@ public class NoteManager {
                 noteList = null;
                 activity = null;
                 token = null;
-                abstractUpdatebleFragments.clear();
                 abstractUpdatebleFragments = null;
             }
         }).start();
+    }
+
+    private synchronized void update() {
+        if (token == null) {
+            return;
+        }
+        String url = StaticVariables.ACCOUNT_URL + "notes";
+        HttpAuthentication authentication = new HttpBasicAuthentication(
+                StaticVariables.CLIENT_ID, StaticVariables.SECRET);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+
+        requestHeaders.setAuthorization(authentication);
+        requestHeaders.add("Authorization", "Bearer " + token);
+
+        HttpEntity httpEntity = new HttpEntity<>(requestHeaders);
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+        try {
+            ResponseEntity<Note[]> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Note[].class);
+            if (response != null && response.getBody() != null) {
+                List<Note> notes = Arrays.asList(response.getBody());
+                noteList.setNoteList(notes);
+                AbstractUpdatebleFragment fragment = getVisibleFragment();
+                if (fragment != null) {
+                    fragment.onUpdateList();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private AbstractUpdatebleFragment getVisibleFragment() {
